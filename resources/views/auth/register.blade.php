@@ -2,7 +2,7 @@
 
 @section('content')
 
-    <h3><a href={{ route('index') }}> Prego - Project Management App for Human Beings </a></h3>
+    <h3><a href={{ route('index') }}> PMApp - Project Management App for Human Beings </a></h3>
     <h3>Register Here</h3>
 
     <div class="row">
