@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Auth;
 use App\Project;
 use Illuminate\Http\Request;
 
@@ -38,7 +39,23 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request,[
+            'name' => 'required|min:3',
+            'due-dates' => 'required|date|after:today',
+            'notes' => 'required|min 10',
+            'status' => 'required'
+        ] );
+
+        $project = new Project;
+        $project->project_name = $request->input('name');
+        $project->project_notes = $request->input('notes');
+        $project->due_date       = $request->input('due-date');
+        $project->project_notes  = $request->input('notes');
+        $project->user_id        = Auth::user()->id;
+
+        $project->save();
+
+        return redirect()->route('projects.index')->with('info','Your Project has been created successfully');
     }
 
     /**
