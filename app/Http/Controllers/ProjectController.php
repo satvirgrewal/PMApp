@@ -17,7 +17,7 @@ class ProjectController extends Controller
      */
     public function index()
     {
-        $projects = Project::all();
+        $projects = Project::personal()->get();
         return view('projects.index')->withProjects($projects);
     }
 
@@ -39,22 +39,19 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request,[
-            'name' => 'required|min:3',
-            'due-dates' => 'required|date|after:today',
-            'notes' => 'required|min 10',
-            'status' => 'required'
-        ] );
-
+        $this->validate($request, [
+            'name'     => 'required|min:3',
+            'due-date' => 'required|date|after:today',
+            'notes'    => 'required|min:10',
+            'status'   => 'required'
+        ]);
         $project = new Project;
-        $project->project_name = $request->input('name');
-        $project->project_notes = $request->input('notes');
+        $project->project_name   = $request->input('name');
+        $project->project_status = $request->input('status');
         $project->due_date       = $request->input('due-date');
         $project->project_notes  = $request->input('notes');
         $project->user_id        = Auth::user()->id;
-
         $project->save();
-
         return redirect()->route('projects.index')->with('info','Your Project has been created successfully');
     }
 
@@ -66,7 +63,8 @@ class ProjectController extends Controller
      */
     public function show($id)
     {
-        //
+        $project = Project::find($id);
+        return view('projects.show')->withProject($project);
     }
 
     /**

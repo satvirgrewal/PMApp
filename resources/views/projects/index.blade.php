@@ -5,14 +5,17 @@
     @include('layouts.partials.sidebar')
     <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
         @include('layouts.partials.alerts')
-        <h1 class="page-header">Projects</h1>
+        <h1 class="page-header">
+            Projects
+            <a class="btn btn-info" href="{{ route('projects.create') }}">New Project</a>
+        </h1>
 
-        <div class="col-lg-6">
-            @if( $project )
+        <div class="container">
+            @if( $projects )
                 <div class="row">
-                    @foreach ($project as $proj)
+                    @foreach ($projects as $proj)
                         <div class="col-md-3" style="border:1px solid #ccc;margin-left:5px;">
-                            <h2>{!! $proj->project_name !!}</h2>
+                            <h2><a href="/projects/{{ $proj->id }}">{!! $proj->project_name !!}</a></h2>
                             <p>Due : {!! date_format(new DateTime($proj->due_date), "D, m Y") !!}</p>
                             <p>Status: {!! $proj->project_status !!}</p>
                             <p>Tasks: 0</p>
@@ -22,12 +25,10 @@
                     @endforeach
                 </div>
             @endif
-
-            @if( $project->isEmpty() )
-                <h3>There are currently no Projects</h3>
-            @endif
         </div>
 
-        <a class="btn btn-info" href="{{ route('projects.create') }}">New Project</a>
+        @if( $projects->isEmpty() )
+            <h3>There are currently no Projects</h3>
+        @endif
     </div>
 @stop
